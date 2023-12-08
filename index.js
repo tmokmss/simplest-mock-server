@@ -55,6 +55,16 @@ const handler = (req, res, _) => {
 app.all("/*", handler);
 app.all("/", handler);
 
-console.log(`server started at http://${host}:${port}`);
+const server = app.listen(port, host, () => {
+    console.log(`server started at http://${host}:${port}`);
+});
 
-app.listen(port, host);
+const shutdown = () => {
+    server.close(() => {
+        console.log("server stopped");
+    });
+};
+
+process.on("SIGHUP", shutdown);
+process.on("SIGINT", shutdown);
+process.on("SIGTERM", shutdown);
