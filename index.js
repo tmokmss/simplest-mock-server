@@ -12,6 +12,12 @@ const argv = yargs(hideBin(process.argv))
         default: false,
         description: "Print request content in json format",
     })
+    .option("echo", {
+        alias: "e",
+        type: "boolean",
+        default: false,
+        description: "Echo back request body in the response body",
+    })
     .option("port", {
         alias: "p",
         type: "number",
@@ -36,7 +42,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const outputAsJson = argv.json;
-const responsStatusCode = argv.status;
+const echo = argv.echo;
+const responseStatusCode = argv.status;
 const port = argv.port;
 const host = argv.host;
 
@@ -49,7 +56,11 @@ const handler = (req, res, _) => {
         body: req.body,
     };
     console.log(outputAsJson ? JSON.stringify(dump) : dump);
-    res.status(responsStatusCode).send("");
+    if (echo) {
+        res.status(responseStatusCode).json(dump);
+    } else {
+        res.status(responseStatusCode).send("");
+    }
 };
 
 app.all("/*", handler);

@@ -28,3 +28,10 @@ To see other options, use `-h` option.
 ```sh
 simplest-mock-server -h
 ```
+
+## Develop
+```sh
+# publish to npm
+# increment version in package.json manually first
+npm publish
+```
