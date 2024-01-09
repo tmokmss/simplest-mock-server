@@ -18,6 +18,11 @@ const argv = yargs(hideBin(process.argv))
         default: false,
         description: "Echo back request body in the response body",
     })
+    .option("cors", {
+        type: "boolean",
+        default: false,
+        description: "Add CORS headers when returning a response",
+    })
     .option("port", {
         alias: "p",
         type: "number",
@@ -43,6 +48,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const outputAsJson = argv.json;
 const echo = argv.echo;
+const cors = argv.cors;
 const responseStatusCode = argv.status;
 const port = argv.port;
 const host = argv.host;
@@ -56,6 +62,12 @@ const handler = (req, res, _) => {
         body: req.body,
     };
     console.log(outputAsJson ? JSON.stringify(dump) : dump);
+
+    if (cors) {
+        res.set("Access-Control-Allow-Origin", "*");
+        res.set("Access-Control-Allow-Methods", "*");
+    }
+
     if (echo) {
         res.status(responseStatusCode).json(dump);
     } else {

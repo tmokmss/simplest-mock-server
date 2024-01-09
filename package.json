@@ -1,6 +1,6 @@
 {
   "name": "simplest-mock-server",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Mock HTTP server which only prints request content and return a fixed response to any requests.",
   "main": "index.js",
   "scripts": {
