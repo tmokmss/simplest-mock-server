@@ -13,7 +13,7 @@ You can use this server when you just want to check what request your client sen
 You can install this project from npm.
 
 ```sh
-npm install -g simplest-mock-server
+npx simplest-mock-server
 ```
 
 ## Usage

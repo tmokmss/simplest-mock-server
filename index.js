@@ -1,16 +1,24 @@
 #!/usr/bin/env node
 const express = require("express");
 const yargs = require("yargs/yargs");
+const os = require("os");
 const { hideBin } = require("yargs/helpers");
+const formData = require("express-form-data");
 
 const argv = yargs(hideBin(process.argv))
     .usage("Usage: $0 [options]")
     .help("h")
+    .alias("h", "help")
     .option("json", {
         alias: "j",
         type: "boolean",
         default: false,
         description: "Print request content in json format",
+    })
+    .option("form-data", {
+        type: "boolean",
+        default: false,
+        description: "Accept and print formData payload",
     })
     .option("echo", {
         alias: "e",
@@ -42,16 +50,21 @@ const argv = yargs(hideBin(process.argv))
         description: "server host address",
     }).argv;
 
-const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 const outputAsJson = argv.json;
 const echo = argv.echo;
 const corsOrigin = argv.corsOrigin;
 const responseStatusCode = argv.status;
 const port = argv.port;
 const host = argv.host;
+const acceptFormData = argv["form-data"];
+
+const app = express();
+if (acceptFormData) {
+    app.use(formData.parse({ uploadDir: os.tmpdir() }));
+} else {
+    app.use(express.json());
+}
+app.use(express.urlencoded({ extended: true }));
 
 const handler = (req, res, _) => {
     const dump = {
@@ -60,6 +73,7 @@ const handler = (req, res, _) => {
         query: req.query,
         headers: req.headers,
         body: req.body,
+        files: acceptFormData ? req.files : undefined,
     };
     console.log(outputAsJson ? JSON.stringify(dump) : dump);
 
