@@ -10,23 +10,17 @@ You can use this server when you just want to check what request your client sen
 ## Install
 **Prerequisites**: You must install Node.js and npm before installation.
 
-You can install this project from npm.
-
-```sh
-npx simplest-mock-server
-```
-
 ## Usage
 You can run a mock server with port number 3000 and a fixed response code `200` by the following command:
 
 ```sh
-simplest-mock-server --port 3000 --status 200
+npx simplest-mock-server --port 3000 --status 200
 ```
 
 To see other options, use `-h` option.
 
 ```sh
-simplest-mock-server -h
+npx simplest-mock-server -h
 ```
 
 ## Develop
